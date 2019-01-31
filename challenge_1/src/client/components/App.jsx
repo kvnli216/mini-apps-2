@@ -1,0 +1,72 @@
+import React from 'react';
+import axios from 'axios';
+import Search from './Search.jsx';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      events: null,
+      view10: [
+        {"date": "-300", "description": "Pilgrims travel to the healing temples of Asclepieion to be cured of their ills. After a ritual purification the followers bring offerings or sacrifices.", "lang": "en", "category1": "By place", "category2": "Greece", "granularity": "year"}, 
+        {"date": "-300", "description": "Pyrrhus, the King of Epirus, is taken as a hostage to Egypt after the Battle of Ipsus and makes a diplomatic marriage with the princess Antigone, daughter of Ptolemy and Berenice.", "lang": "en", "category1": "By place", "category2": "Egypt", "granularity": "year"}, 
+        {"date": "-300", "description": "Ptolemy concludes an alliance with King Lysimachus of Thrace and gives him his daughter Arsinoe II in marriage.", "lang": "en", "category1": "By place", "category2": "Egypt", "granularity": "year"}, 
+        {"date": "-300", "description": "Seleucus founds the city of Antioch, some 20 miles up the Orontes River, naming it after his father.", "lang": "en", "category1": "By place", "category2": "Seleucid Empire", "granularity": "year"}, 
+        {"date": "-300", "description": "After the death of his wife Apama, Seleucus marries Stratonice, daughter of Demetrius Poliorcetes.", "lang": "en", "category1": "By place", "category2": "Seleucid Empire", "granularity": "year"}, 
+        {"date": "-300", "description": "The central texts of Jainism, the Jain scriptures, are recorded (approximate date).{{Citation needed|date=March 2009}}", "lang": "en", "category1": "By place", "category2": "India", "granularity": "year"}, 
+        {"date": "-300", "description": "In Pella (in Macedonia), the artist Gnosis makes a mosaic floor decoration called ''Stag Hunt'' and even signs it with ampquotGnosis made itampquot. It is today preserved at the Archaeological museum in Pella.", "lang": "en", "category1": "By topic", "category2": "Art", "granularity": "year"}, 
+        {"date": "-299", "description": "The Samnites, seizing their chance when Rome is engaged on the Lombard plain, start the third Samnite War with a collection of mercenaries from Gaul, Sabine, and Etruscan allies to help them.", "lang": "en", "category1": "By place", "category2": "Roman Republic", "granularity": "year"}, 
+        {"date": "-299", "description": "The state of Qin attacks eight cities of the state of Chu. Chu then sends an envoy to ask the King of Huai to go to Qin to negotiate peace. Qu Yuan risks his life to go up to the court to persuade the King of Huai not to go to the negotiation.", "lang": "en", "category1": "By place", "category2": "China", "granularity": "year"}, 
+        {"date": "-299", "description": "King Wuling of Zhao abdicates the throne of Zhao to his son.", "lang": "en", "category1": "By place", "category2": "China", "granularity": "year"}
+      ]
+    };
+  }
+
+  // State model
+  updateEvents(data) {
+    this.setState({
+      events: data
+    });
+  }
+
+  updateView10(data) {
+    this.setState({
+      view10: data
+    });
+  }
+
+
+  componentDidMount() {
+    axios.get('http://localhost:3000/events')
+      .then(posts => {
+        console.log('-- SUCCESS fetching posts --');
+        this.updateEvents(posts.data);
+        // let data = {};
+      })
+      .catch(err => {
+        console.log('-- ERR fetching posts --', err);
+      })
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Historical Event Search</h1>
+        <Search updateEvents={this.updateEvents.bind(this)}/>
+
+        <ul>
+          {this.state.view10.map((hEvent, index) => {
+            return (
+              <li key={index}>
+                {hEvent.description}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
+  }
+}
+
+export default App;
+
